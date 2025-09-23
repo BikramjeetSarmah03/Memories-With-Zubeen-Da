@@ -10,6 +10,21 @@
   "upload_source_maps": true,
   "assets": {
     "directory": "./dist/client",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "!/api/docs/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DATABASE",
+      "database_name": "zubeen_da",
+      "database_id": "521b14f0-6f6e-4c42-9a8d-67148123fe2d",
+      "migrations_dir": "./drizzle/migrations"
+    }
+  ],
+  "vars": {
+    "BETTER_AUTH_SECRET": "l5pUMiwDnHyjgjOYxJWKYFvjpkumkwnL",
+    "BETTER_AUTH_URL": "http://localhost:3000",
+    "GOOGLE_CLIENT_ID": "581095517171-akf5s5nqk9skmnhpo9fpobmklm2ahn83.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_SECRET": "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"
   }
 }
