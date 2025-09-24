@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "vite-react-template",
+  "name": "memories_with_zubeen_da",
   "main": "./src/worker/index.ts",
   "compatibility_date": "2025-04-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -20,11 +20,5 @@
       "database_id": "521b14f0-6f6e-4c42-9a8d-67148123fe2d",
       "migrations_dir": "./drizzle/migrations"
     }
-  ],
-  "vars": {
-    "BETTER_AUTH_SECRET": "",
-    "BETTER_AUTH_URL": "",
-    "GOOGLE_CLIENT_ID": "",
-    "GOOGLE_CLIENT_SECRET": ""
-  }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "vite-react-template",
+  "name": "memories_with_zubeen_da",
   "description": "A template for building a React application with Vite, Hono, and Cloudflare Workers",
   "private": true,
   "cloudflare": {
