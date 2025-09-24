@@ -24,6 +24,7 @@ function Index() {
         <h2 className="mb-6 font-semibold text-gray-900 text-2xl">
           Recent Memories
         </h2>
+
         <MemoryGrid />
       </div>
     </div>

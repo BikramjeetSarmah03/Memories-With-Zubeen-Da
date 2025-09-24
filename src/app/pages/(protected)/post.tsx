@@ -14,7 +14,7 @@ import { Footer } from "@/app/components/common/footer";
 import { SUGGESTED_TAGS, FILE_UPLOAD } from "@/app/constants/app";
 import { validateMemoryForm, isValidFileType } from "@/app/utils/validation";
 
-export const Route = createFileRoute("/create-post")({
+export const Route = createFileRoute("/(protected)/post")({
   component: CreatePost,
 });
 

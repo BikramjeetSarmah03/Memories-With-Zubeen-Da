@@ -5,62 +5,47 @@ import {
   RiTwitterXFill,
 } from "@remixicon/react";
 
-import { Button } from "../ui/button";
-import { authClient, useSession } from "@/app/lib/auth.client";
-import { Loader2Icon } from "lucide-react";
+import { authClient } from "@/app/lib/auth.client";
+import {
+  Loader2Icon,
+  LogOutIcon,
+  UploadCloudIcon,
+  UserIcon,
+} from "lucide-react";
+
+import { Button } from "@/app/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/app/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
+
 import { PropsWithChildren } from "react";
 import { toast } from "sonner";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { IUser } from "@/app/lib/types";
 
 export function AuthButton() {
-  const { data, isPending } = useSession();
-  const navigate = useNavigate();
+  const { data, isPending } = authClient.useSession();
 
-  const handleLogout = async () => {
-    try {
-      const data = await authClient.signOut();
-
-      if (data.error) throw new Error(data.error.message);
-
-      toast.success("Logout Successfully");
-      navigate({ to: "/" });
-    } catch (error) {
-      toast.error((error as Error).message);
-    }
-  };
-
-  return (
-    <div>
-      {isPending ? (
-        <Loader2Icon className="size-4 animate-spin" />
-      ) : data?.session ? (
-        <div className="flex items-center gap-4">
-          <h1>{data.user.name}</h1>
-
-          <div className="rounded-full size-10 overflow-hidden">
-            {data.user.image ? (
-              <img src={data.user.image ?? ""} alt={data.user.name} />
-            ) : (
-              <h1>{data.user.name.charAt(0)}</h1>
-            )}
-          </div>
-
-          <Button variant={"outline"} onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
-      ) : (
-        <AuthDialog>
-          <Button variant={"outline"}>Login</Button>
-        </AuthDialog>
-      )}
-    </div>
+  return isPending ? (
+    <Loader2Icon className="size-4 animate-spin" />
+  ) : data?.session ? (
+    <ProfileDropdown user={data.user} />
+  ) : (
+    <AuthDialog>
+      <Button variant={"outline"} size={"sm"}>
+        Login
+      </Button>
+    </AuthDialog>
   );
 }
 
@@ -140,5 +125,53 @@ function AuthDialog({ children }: PropsWithChildren) {
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function ProfileDropdown({ user }: { user: IUser }) {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const data = await authClient.signOut();
+
+      if (data.error) throw new Error(data.error.message);
+
+      toast.success("Logout Successfully");
+      navigate({ to: "/" });
+    } catch (error) {
+      toast.error((error as Error).message);
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="cursor-pointer">
+        <Avatar className="border-2 border-black">
+          <AvatarImage src={user.image ?? ""} alt={user.name.charAt(0)} />
+
+          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+        </Avatar>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="divide-y">
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to="/profile">
+            <UserIcon />
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link to="/post">
+            <UploadCloudIcon />
+            Upload
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
+          <LogOutIcon className="size-4" />
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

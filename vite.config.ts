@@ -12,6 +12,8 @@ export default defineConfig({
       target: "react",
       autoCodeSplitting: true,
       routesDirectory: "./src/app/pages",
+      routeFileIgnorePattern: "_components",
+      routeToken: "layout",
     }),
     react(),
     cloudflare(),

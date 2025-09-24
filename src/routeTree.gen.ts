@@ -9,16 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './app/pages/__root'
-import { Route as CreatePostRouteImport } from './app/pages/create-post'
 import { Route as AchievementsRouteImport } from './app/pages/achievements'
 import { Route as AboutRouteImport } from './app/pages/about'
+import { Route as AuthLayoutRouteImport } from './app/pages/auth/layout'
+import { Route as protectedLayoutRouteImport } from './app/pages/(protected)/layout'
 import { Route as IndexRouteImport } from './app/pages/index'
+import { Route as AuthLoginRouteImport } from './app/pages/auth/login'
+import { Route as protectedProfileRouteImport } from './app/pages/(protected)/profile'
+import { Route as protectedPostRouteImport } from './app/pages/(protected)/post'
 
-const CreatePostRoute = CreatePostRouteImport.update({
-  id: '/create-post',
-  path: '/create-post',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AchievementsRoute = AchievementsRouteImport.update({
   id: '/achievements',
   path: '/achievements',
@@ -29,55 +28,106 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLayoutRoute = AuthLayoutRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const protectedLayoutRoute = protectedLayoutRouteImport.update({
+  id: '/(protected)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+const protectedProfileRoute = protectedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => protectedLayoutRoute,
+} as any)
+const protectedPostRoute = protectedPostRouteImport.update({
+  id: '/post',
+  path: '/post',
+  getParentRoute: () => protectedLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof protectedLayoutRouteWithChildren
+  '/auth': typeof AuthLayoutRouteWithChildren
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
-  '/create-post': typeof CreatePostRoute
+  '/post': typeof protectedPostRoute
+  '/profile': typeof protectedProfileRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof protectedLayoutRouteWithChildren
+  '/auth': typeof AuthLayoutRouteWithChildren
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
-  '/create-post': typeof CreatePostRoute
+  '/post': typeof protectedPostRoute
+  '/profile': typeof protectedProfileRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(protected)': typeof protectedLayoutRouteWithChildren
+  '/auth': typeof AuthLayoutRouteWithChildren
   '/about': typeof AboutRoute
   '/achievements': typeof AchievementsRoute
-  '/create-post': typeof CreatePostRoute
+  '/(protected)/post': typeof protectedPostRoute
+  '/(protected)/profile': typeof protectedProfileRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/achievements' | '/create-post'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/about'
+    | '/achievements'
+    | '/post'
+    | '/profile'
+    | '/auth/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/achievements' | '/create-post'
-  id: '__root__' | '/' | '/about' | '/achievements' | '/create-post'
+  to:
+    | '/'
+    | '/auth'
+    | '/about'
+    | '/achievements'
+    | '/post'
+    | '/profile'
+    | '/auth/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/(protected)'
+    | '/auth'
+    | '/about'
+    | '/achievements'
+    | '/(protected)/post'
+    | '/(protected)/profile'
+    | '/auth/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  protectedLayoutRoute: typeof protectedLayoutRouteWithChildren
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
   AboutRoute: typeof AboutRoute
   AchievementsRoute: typeof AchievementsRoute
-  CreatePostRoute: typeof CreatePostRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/create-post': {
-      id: '/create-post'
-      path: '/create-post'
-      fullPath: '/create-post'
-      preLoaderRoute: typeof CreatePostRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/achievements': {
       id: '/achievements'
       path: '/achievements'
@@ -92,6 +142,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(protected)': {
+      id: '/(protected)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof protectedLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -99,14 +163,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/(protected)/profile': {
+      id: '/(protected)/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof protectedProfileRouteImport
+      parentRoute: typeof protectedLayoutRoute
+    }
+    '/(protected)/post': {
+      id: '/(protected)/post'
+      path: '/post'
+      fullPath: '/post'
+      preLoaderRoute: typeof protectedPostRouteImport
+      parentRoute: typeof protectedLayoutRoute
+    }
   }
 }
 
+interface protectedLayoutRouteChildren {
+  protectedPostRoute: typeof protectedPostRoute
+  protectedProfileRoute: typeof protectedProfileRoute
+}
+
+const protectedLayoutRouteChildren: protectedLayoutRouteChildren = {
+  protectedPostRoute: protectedPostRoute,
+  protectedProfileRoute: protectedProfileRoute,
+}
+
+const protectedLayoutRouteWithChildren = protectedLayoutRoute._addFileChildren(
+  protectedLayoutRouteChildren,
+)
+
+interface AuthLayoutRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+}
+
+const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+}
+
+const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
+  AuthLayoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  protectedLayoutRoute: protectedLayoutRouteWithChildren,
+  AuthLayoutRoute: AuthLayoutRouteWithChildren,
   AboutRoute: AboutRoute,
   AchievementsRoute: AchievementsRoute,
-  CreatePostRoute: CreatePostRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
