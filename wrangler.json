@@ -22,9 +22,9 @@
     }
   ],
   "vars": {
-    "BETTER_AUTH_SECRET": "l5pUMiwDnHyjgjOYxJWKYFvjpkumkwnL",
+    "BETTER_AUTH_SECRET": "",
     "BETTER_AUTH_URL": "http://localhost:3000",
-    "GOOGLE_CLIENT_ID": "581095517171-akf5s5nqk9skmnhpo9fpobmklm2ahn83.apps.googleusercontent.com",
-    "GOOGLE_CLIENT_SECRET": "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"
+    "GOOGLE_CLIENT_ID": "",
+    "GOOGLE_CLIENT_SECRET": ""
   }
 }
